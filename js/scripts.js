@@ -57,37 +57,138 @@
     );
   });
 
-  // Create timeline
-  $("#experience-timeline").each(function () {
-    $this = $(this); // Store reference to this
-    $userContent = $this.children("div"); // user content
+  // Create experience carousel
+  $("#experience-carousel").each(function () {
+    var $carousel = $(this);
+    var $slides = $carousel.children("div");
+    var total = $slides.length;
 
-    // Create each timeline block
-    $userContent.each(function () {
-      $(this)
-        .addClass("vtimeline-content")
-        .wrap(
-          '<div class="vtimeline-point"><div class="vtimeline-block"></div></div>'
-        );
+    if (!total) return;
+
+    // Build the header of each slide from its h3/h4 and data-date
+    $slides.each(function () {
+      var $slide = $(this).addClass("exp-slide");
+      var date = $slide.data("date");
+      var $head = $('<div class="exp-slide-head"></div>');
+
+      $head.append($slide.children("h3"), $slide.children("h4"));
+
+      // Add the date to the header if it exists
+      if (date) {
+        $head.append('<span class="exp-date">' + date + "</span>");
+      }
+
+      $slide.prepend($head);
     });
 
-    // Add icons to each block
-    $this.find(".vtimeline-point").each(function () {
-      $(this).prepend(
-        '<div class="vtimeline-icon"><i class="fa fa-map-marker"></i></div>'
+    $carousel
+      .addClass("exp-carousel")
+      .attr({
+        role: "region",
+        "aria-label": "Work experience",
+        tabindex: "0",
+      })
+      .children()
+      .wrapAll('<div class="exp-viewport"></div>');
+
+    // A lone role needs no controls
+    if (total < 2) {
+      $slides.addClass("is-active");
+      return;
+    }
+
+    // Build the prev/next arrows and the position dots
+    var $dots = $('<div class="exp-dots"></div>');
+    $slides.each(function (i) {
+      $dots.append(
+        $('<button type="button" class="exp-dot"></button>').attr(
+          "aria-label",
+          "Role " + (i + 1) + ": " + $.trim($(this).find("h3").text())
+        )
       );
     });
 
-    // Add dates to the timeline if exists
-    $this.find(".vtimeline-content").each(function () {
-      var date = $(this).data("date");
-      if (date) {
-        // Prepend if exists
-        $(this)
-          .parent()
-          .prepend('<span class="vtimeline-date">' + date + "</span>");
-      }
+    var $prev = $(
+      '<button type="button" class="exp-nav exp-prev" aria-label="Previous role">' +
+        '<i class="fa fa-chevron-left" aria-hidden="true"></i></button>'
+    );
+    var $next = $(
+      '<button type="button" class="exp-nav exp-next" aria-label="Next role">' +
+        '<i class="fa fa-chevron-right" aria-hidden="true"></i></button>'
+    );
+
+    $carousel.append(
+      $('<div class="exp-controls"></div>').append($prev, $dots, $next)
+    );
+
+    var $allDots = $dots.children();
+    var current = 0;
+
+    function goTo(index) {
+      current = ((index % total) + total) % total; // wrap in both directions
+
+      $slides
+        .removeClass("is-active")
+        .attr("aria-hidden", "true")
+        .eq(current)
+        .addClass("is-active")
+        .attr("aria-hidden", "false")
+        .find(".exp-body")
+        .scrollTop(0); // always start a role at the top
+
+      $allDots
+        .removeClass("is-active")
+        .attr("aria-selected", "false")
+        .eq(current)
+        .addClass("is-active")
+        .attr("aria-selected", "true");
+    }
+
+    $prev.click(function () {
+      goTo(current - 1);
     });
+
+    $next.click(function () {
+      goTo(current + 1);
+    });
+
+    $allDots.click(function () {
+      goTo($(this).index());
+    });
+
+    $carousel.keydown(function (e) {
+      if (e.which !== 37 && e.which !== 39) return;
+      e.preventDefault();
+      goTo(e.which === 37 ? current - 1 : current + 1);
+    });
+
+    // Swipe between roles, without stealing vertical scrolling inside a card
+    var startX = null;
+    var startY = null;
+
+    $carousel
+      .find(".exp-viewport")
+      .on("touchstart", function (e) {
+        var touch = e.originalEvent.touches[0];
+        startX = touch.pageX;
+        startY = touch.pageY;
+      })
+      .on("touchend", function (e) {
+        if (startX === null) return;
+
+        var touch = e.originalEvent.changedTouches[0];
+        var dx = touch.pageX - startX;
+        var dy = touch.pageY - startY;
+
+        startX = null;
+        startY = null;
+
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+          goTo(dx < 0 ? current + 1 : current - 1);
+        }
+      });
+
+    goTo(0);
   });
 
   // Open mobile menu

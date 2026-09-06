@@ -96,7 +96,11 @@ body {
 
 // No JS styles
 .no-js {
-    #experience-timeline {
+    #experience-carousel {
+        max-width: 1000px;
+        margin: 30px auto 0 auto;
+        text-align: left;
+
         > div {
             background: $background;
             padding: 10px;
@@ -124,10 +128,11 @@ body {
                 margin: 0;
             }
         }
+    }
 
-        &:before, &:after {
-            content: none;
-        }
+    // Without JS there is no frame to scroll inside of
+    .exp-body {
+        overflow: visible;
     }
 }
 
@@ -475,49 +480,72 @@ footer {
     }
 }
 
-#experience-timeline {
+.exp-carousel {
     margin: 30px auto 0 auto;
     position: relative;
     max-width: 1000px;
+    text-align: left;
+    outline: none;
 
-    &:before {
-        position: absolute;
-        content: '';
-        top: 0;
-        bottom: 0;
-        left: 303px;
-        right: auto;
-        height: 100%;
-        width: 3px;
-        background: $base-color;
-        z-index: 0;
-    }
-
-    &:after {
-        position: absolute;
-        content: '';
-        width: 3px;
-        height: 40px;
-        background: $base-color;
-        background: linear-gradient(to bottom, $base-color, rgba($base-color, 0));
-        top: 100%;
-        left: 303px;
+    &:focus-visible {
+        .exp-viewport {
+            border-color: $base-color;
+            box-shadow: 0 0 0 2px rgba($base-color, 0.35);
+        }
     }
 }
 
-.vtimeline-content {
-    margin-left: 350px;
+// Fixed frame holding one role at a time
+.exp-viewport {
+    position: relative;
+    height: 420px;
     background: #fff;
     border: 1px solid #e6e6e6;
-    padding: 15px;
     border-radius: 3px;
-    text-align: left;
+    overflow: hidden;
+
+    // Fade hint that more prose sits below the fold
+    &:after {
+        position: absolute;
+        content: '';
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 30px;
+        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+        pointer-events: none;
+    }
+}
+
+.exp-slide {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 25px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease;
+
+    &.is-active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.exp-slide-head {
+    flex: 0 0 auto;
+    border-bottom: 1px solid $border;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
 
     h3 {
         font-size: 1.5em;
         font-weight: 300;
         color: $heading;
-        display: inline-block;
         margin: 0;
     }
 
@@ -525,49 +553,109 @@ footer {
         font-size: 1.2em;
         font-weight: 300;
         color: #7e8890;
-        margin: 0 0 15px 0;
+        margin: 0 0 5px 0;
     }
+
+    .exp-date {
+        display: block;
+        font-size: 0.9em;
+        font-weight: 300;
+        color: $base-color;
+    }
+}
+
+// The scrollable region
+.exp-body {
+    flex: 1 1 auto;
+    min-height: 0; // let the flex item shrink so it scrolls instead of overflowing
+    overflow-y: auto;
+    padding-right: 15px;
+    padding-bottom: 25px;
 
     p {
         color: $text;
         font-size: 0.9em;
         margin: 0;
     }
-}
 
-.vtimeline-point {
-    position: relative;
-    display: block;
-    vertical-align: top;
-    margin-bottom: 30px;
-}
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
 
-.vtimeline-icon {
-    position: relative;
-    color: #fff;
-    width: 50px;
-    height: 50px;
-    background: $base-color;
-    border-radius: 50%;
-    float: left;
-    z-index: 99;
-    margin-left: 280px;
+    &::-webkit-scrollbar-track {
+        background: $background-alt;
+        border-radius: 3px;
+    }
 
-    i {
-        display: block;
-        font-size: 2em;
-        margin-top: 10px;
+    &::-webkit-scrollbar-thumb {
+        background: rgba($text, 0.4);
+        border-radius: 3px;
+
+        &:hover {
+            background: rgba($text, 0.7);
+        }
     }
 }
 
-.vtimeline-date {
-    width: 260px;
-    text-align: right;
-    position: absolute;
-    left: 0;
-    top: 10px;
-    font-weight: 300;
-    color: #374054;
+.exp-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.exp-nav {
+    background: none;
+    border: none;
+    padding: 5px 15px;
+    color: $base-color;
+    font-size: 1.5em;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.25s ease;
+
+    &:hover {
+        color: darken($base-color, 15%);
+    }
+}
+
+.exp-dots {
+    display: flex;
+    align-items: center;
+}
+
+.exp-dot {
+    width: 10px;
+    height: 10px;
+    padding: 0;
+    border-radius: 50%;
+    background: $border;
+    cursor: pointer;
+    transition: background 0.25s ease;
+
+    // Keep the tap target comfortable without growing the visible dot
+    box-sizing: content-box;
+    border: 5px solid transparent;
+    background-clip: content-box;
+
+    &:hover {
+        background: rgba($base-color, 0.5);
+        background-clip: content-box;
+    }
+
+    &.is-active {
+        background: $base-color;
+        background-clip: content-box;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .exp-slide,
+    .exp-dot,
+    .exp-nav {
+        transition: none;
+    }
 }
 
 /*
@@ -841,31 +929,29 @@ footer {
     -----------------------------
 */
 
-// Collapse timeline
+// Roomier experience carousel on small screens
 @media only screen and (max-width: 750px) {
 
-    #experience-timeline {
-        &:before, &:after {
-            left: 23px;
-        }
-
+    .exp-viewport {
+        height: 60vh;
+        min-height: 320px;
     }
 
-    .vtimeline-date {
-        width: auto;
-        text-align: left;
-        position: relative;
-        margin-bottom: 15px;
-        display: block;
-        margin-left: 70px;
+    .exp-slide {
+        padding: 15px;
     }
 
-    .vtimeline-icon {
-        margin-left: 0;
+    .exp-body {
+        padding-right: 10px;
     }
 
-    .vtimeline-content {
-        margin-left: 70px;
+    .exp-nav {
+        font-size: 1.75em;
+        padding: 10px 20px;
+    }
+
+    .exp-dot {
+        border-width: 8px;
     }
 
 }
