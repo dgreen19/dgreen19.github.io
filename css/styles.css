@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*!
     Title: Dev Portfolio Template
     Version: 1.2.1
@@ -50,37 +51,47 @@ body.active {
   z-index: -1;
 }
 
-.no-js #experience-carousel {
+.no-js #experience-carousel,
+.no-js #projects-carousel {
   max-width: 1000px;
   margin: 30px auto 0 auto;
   text-align: left;
 }
-.no-js #experience-carousel > div {
+.no-js #experience-carousel > div,
+.no-js #projects-carousel > div {
   background: #fff;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #dcd9d9;
 }
-.no-js #experience-carousel > div h3 {
+.no-js #experience-carousel > div h3,
+.no-js #projects-carousel > div h3 {
   font-size: 1.5em;
   font-weight: 300;
   color: #374054;
   display: inline-block;
   margin: 0;
 }
-.no-js #experience-carousel > div h4 {
+.no-js #experience-carousel > div h4,
+.no-js #projects-carousel > div h4 {
   font-size: 1.2em;
   font-weight: 300;
   color: #7e8890;
   margin: 0 0 15px 0;
 }
-.no-js #experience-carousel > div p {
+.no-js #experience-carousel > div p, .no-js #experience-carousel > div ul,
+.no-js #projects-carousel > div p,
+.no-js #projects-carousel > div ul {
   color: #74808a;
   font-size: 0.9em;
   margin: 0;
 }
-.no-js .exp-body {
+.no-js .carousel-body {
   overflow: visible;
+}
+.no-js .project-media img {
+  max-width: 300px;
+  height: auto;
 }
 
 @keyframes dropHeader {
@@ -280,7 +291,7 @@ footer {
   height: 100vh;
   min-height: 500px;
   max-height: 1080px;
-  background: url(../images/lead-bg.jpg);
+  background: url(../images/coding-giphy.gif);
   background-size: cover;
   padding: 15px;
   overflow: hidden;
@@ -392,19 +403,24 @@ footer {
   color: #374054;
 }
 
-.exp-carousel {
+/*
+    Shared carousel component — used by both #experience and #projects.
+    Any [data-carousel] container gets one slide visible at a time, with a
+    fixed-height frame whose .carousel-body scrolls internally.
+*/
+.carousel {
   margin: 30px auto 0 auto;
   position: relative;
   max-width: 1000px;
   text-align: left;
   outline: none;
 }
-.exp-carousel:focus-visible .exp-viewport {
+.carousel:focus-visible .carousel-viewport {
   border-color: #3498db;
   box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.35);
 }
 
-.exp-viewport {
+.carousel-viewport {
   position: relative;
   height: 420px;
   background: #fff;
@@ -412,7 +428,7 @@ footer {
   border-radius: 3px;
   overflow: hidden;
 }
-.exp-viewport:after {
+.carousel-viewport:after {
   position: absolute;
   content: "";
   left: 0;
@@ -423,7 +439,7 @@ footer {
   pointer-events: none;
 }
 
-.exp-slide {
+.carousel-slide {
   position: absolute;
   top: 0;
   right: 0;
@@ -436,71 +452,83 @@ footer {
   visibility: hidden;
   transition: opacity 0.35s ease;
 }
-.exp-slide.is-active {
+.carousel-slide.is-active {
   opacity: 1;
   visibility: visible;
 }
 
-.exp-slide-head {
+.carousel-head {
   flex: 0 0 auto;
   border-bottom: 1px solid #dcd9d9;
   padding-bottom: 10px;
   margin-bottom: 15px;
 }
-.exp-slide-head h3 {
+.carousel-head h3 {
   font-size: 1.5em;
   font-weight: 300;
   color: #374054;
   margin: 0;
 }
-.exp-slide-head h4 {
+.carousel-head h4 {
   font-size: 1.2em;
   font-weight: 300;
   color: #7e8890;
   margin: 0 0 5px 0;
 }
-.exp-slide-head .exp-date {
+.carousel-head .carousel-meta {
   display: block;
   font-size: 0.9em;
   font-weight: 300;
   color: #3498db;
 }
 
-.exp-body {
+.carousel-body {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   padding-right: 15px;
   padding-bottom: 25px;
 }
-.exp-body p {
+.carousel-body p {
   color: #74808a;
   font-size: 0.9em;
   margin: 0;
 }
-.exp-body::-webkit-scrollbar {
+.carousel-body ul {
+  color: #74808a;
+  font-size: 0.9em;
+  margin: 0;
+  padding-left: 20px;
+}
+.carousel-body li {
+  margin-bottom: 10px;
+}
+.carousel-body li:last-child {
+  margin-bottom: 0;
+}
+.carousel-body::-webkit-scrollbar {
   width: 6px;
 }
-.exp-body::-webkit-scrollbar-track {
+.carousel-body::-webkit-scrollbar-track {
   background: #f2f2f5;
   border-radius: 3px;
 }
-.exp-body::-webkit-scrollbar-thumb {
+.carousel-body::-webkit-scrollbar-thumb {
   background: rgba(116, 128, 138, 0.4);
   border-radius: 3px;
 }
-.exp-body::-webkit-scrollbar-thumb:hover {
+.carousel-body::-webkit-scrollbar-thumb:hover {
   background: rgba(116, 128, 138, 0.7);
 }
 
-.exp-controls {
+.carousel-controls {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 20px;
 }
 
-.exp-nav {
+.carousel-nav {
   background: none;
   border: none;
   padding: 5px 15px;
@@ -510,16 +538,16 @@ footer {
   cursor: pointer;
   transition: color 0.25s ease;
 }
-.exp-nav:hover {
+.carousel-nav:hover {
   color: rgb(11.4890475018%, 43.4030683403%, 64.7854623021%);
 }
 
-.exp-dots {
+.carousel-dots {
   display: flex;
   align-items: center;
 }
 
-.exp-dot {
+.carousel-dot {
   width: 10px;
   height: 10px;
   padding: 0;
@@ -531,19 +559,19 @@ footer {
   border: 5px solid transparent;
   background-clip: content-box;
 }
-.exp-dot:hover {
+.carousel-dot:hover {
   background: rgba(52, 152, 219, 0.5);
   background-clip: content-box;
 }
-.exp-dot.is-active {
+.carousel-dot.is-active {
   background: #3498db;
   background-clip: content-box;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .exp-slide,
-  .exp-dot,
-  .exp-nav {
+  .carousel-slide,
+  .carousel-dot,
+  .carousel-nav {
     transition: none;
   }
 }
@@ -609,47 +637,62 @@ footer {
   margin-bottom: 50px;
 }
 
-.project {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto 30px auto;
+#projects-carousel .carousel-slide {
+  flex-direction: row;
+  padding: 0;
+}
+#projects-carousel .carousel-viewport:after {
+  content: none;
+}
+#projects-carousel .carousel-body {
+  padding-bottom: 0;
+}
+
+.project-media {
+  flex: 0 0 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
   overflow: hidden;
-  background: #fff;
-  border-radius: 4px;
+  background: #f2f2f5;
+  border-right: 1px solid #e6e6e6;
+}
+.project-media img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 3px;
 }
 
-.project-image {
-  float: left;
+.project-detail {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 25px;
 }
 
-.project-info {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-left: 300px;
-  padding: 15px;
+.project-actions {
+  flex: 0 0 auto;
+  padding-top: 15px;
 }
-.project-info h3 {
-  font-size: 1.5em;
-  font-weight: 300;
-  color: #374054;
-  margin: 0 0 15px 0;
-}
-.project-info p {
-  color: #74808a;
-  margin: 0 0 15px 0;
+.project-actions a {
+  display: inline-block;
+  color: #3498db;
   font-size: 0.9em;
+  padding: 8px 20px;
+  border: 2px solid #3498db;
+  border-radius: 30px;
+  transition: 0.5s ease all;
 }
-
-.no-image .project-info {
-  position: relative;
-  margin: 0;
-  padding: 30px 15px;
-  transform: none;
-}
-
-#more-projects {
-  display: none;
+.project-actions a:hover {
+  color: #fff;
+  background: #3498db;
+  text-decoration: none;
 }
 
 /*
@@ -799,22 +842,28 @@ footer {
     -----------------------------
 */
 @media only screen and (max-width: 750px) {
-  .exp-viewport {
+  .carousel-viewport {
     height: 60vh;
     min-height: 320px;
   }
-  .exp-slide {
+  .carousel-slide {
     padding: 15px;
   }
-  .exp-body {
+  .carousel-body {
     padding-right: 10px;
   }
-  .exp-nav {
+  .carousel-nav {
     font-size: 1.75em;
     padding: 10px 20px;
   }
-  .exp-dot {
+  .carousel-dot {
     border-width: 8px;
+  }
+  .project-media {
+    display: none;
+  }
+  .project-detail {
+    padding: 15px;
   }
 }
 @media only screen and (max-width: 992px) {
@@ -880,16 +929,6 @@ footer {
   }
   .education-block h3, .education-block span {
     float: none;
-  }
-  .project-image {
-    display: none;
-  }
-  .project-info {
-    position: relative;
-    margin: 0;
-    padding: 30px 15px;
-    top: auto;
-    transform: none;
   }
   footer {
     text-align: center;

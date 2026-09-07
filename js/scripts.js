@@ -57,68 +57,54 @@
     );
   });
 
-  // Create experience carousel
-  $("#experience-carousel").each(function () {
+  // Turn any [data-carousel] container into a one-at-a-time carousel. Each
+  // direct child div is a slide; a .carousel-body inside a slide scrolls.
+  $("[data-carousel]").each(function () {
     var $carousel = $(this);
-    var $slides = $carousel.children("div");
+    var $slides = $carousel.children("div").addClass("carousel-slide");
     var total = $slides.length;
+    var label = $carousel.attr("data-carousel-label") || "Carousel";
 
     if (!total) return;
 
-    // Build the header of each slide from its h3/h4 and data-date
-    $slides.each(function () {
-      var $slide = $(this).addClass("exp-slide");
-      var date = $slide.data("date");
-      var $head = $('<div class="exp-slide-head"></div>');
-
-      $head.append($slide.children("h3"), $slide.children("h4"));
-
-      // Add the date to the header if it exists
-      if (date) {
-        $head.append('<span class="exp-date">' + date + "</span>");
-      }
-
-      $slide.prepend($head);
-    });
-
     $carousel
-      .addClass("exp-carousel")
+      .addClass("carousel")
       .attr({
         role: "region",
-        "aria-label": "Work experience",
+        "aria-label": label,
         tabindex: "0",
       })
       .children()
-      .wrapAll('<div class="exp-viewport"></div>');
+      .wrapAll('<div class="carousel-viewport"></div>');
 
-    // A lone role needs no controls
+    // A lone slide needs no controls
     if (total < 2) {
       $slides.addClass("is-active");
       return;
     }
 
     // Build the prev/next arrows and the position dots
-    var $dots = $('<div class="exp-dots"></div>');
+    var $dots = $('<div class="carousel-dots"></div>');
     $slides.each(function (i) {
       $dots.append(
-        $('<button type="button" class="exp-dot"></button>').attr(
+        $('<button type="button" class="carousel-dot"></button>').attr(
           "aria-label",
-          "Role " + (i + 1) + ": " + $.trim($(this).find("h3").text())
+          i + 1 + " of " + total + ": " + $.trim($(this).find("h3").text())
         )
       );
     });
 
     var $prev = $(
-      '<button type="button" class="exp-nav exp-prev" aria-label="Previous role">' +
+      '<button type="button" class="carousel-nav carousel-prev" aria-label="Previous">' +
         '<i class="fa fa-chevron-left" aria-hidden="true"></i></button>'
     );
     var $next = $(
-      '<button type="button" class="exp-nav exp-next" aria-label="Next role">' +
+      '<button type="button" class="carousel-nav carousel-next" aria-label="Next">' +
         '<i class="fa fa-chevron-right" aria-hidden="true"></i></button>'
     );
 
     $carousel.append(
-      $('<div class="exp-controls"></div>').append($prev, $dots, $next)
+      $('<div class="carousel-controls"></div>').append($prev, $dots, $next)
     );
 
     var $allDots = $dots.children();
@@ -133,8 +119,8 @@
         .eq(current)
         .addClass("is-active")
         .attr("aria-hidden", "false")
-        .find(".exp-body")
-        .scrollTop(0); // always start a role at the top
+        .find(".carousel-body")
+        .scrollTop(0); // always start a slide at the top
 
       $allDots
         .removeClass("is-active")
@@ -162,12 +148,12 @@
       goTo(e.which === 37 ? current - 1 : current + 1);
     });
 
-    // Swipe between roles, without stealing vertical scrolling inside a card
+    // Swipe between slides, without stealing vertical scrolling inside a card
     var startX = null;
     var startY = null;
 
     $carousel
-      .find(".exp-viewport")
+      .find(".carousel-viewport")
       .on("touchstart", function (e) {
         var touch = e.originalEvent.touches[0];
         startX = touch.pageX;
@@ -199,13 +185,5 @@
   // Close mobile menu
   $("#mobile-menu-close").click(function () {
     $("header, body").removeClass("active");
-  });
-
-  // Load additional projects
-  $("#view-more-projects").click(function (e) {
-    e.preventDefault();
-    $(this).fadeOut(300, function () {
-      $("#more-projects").fadeIn(300);
-    });
   });
 })(jQuery);

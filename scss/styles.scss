@@ -95,8 +95,11 @@ body {
 }
 
 // No JS styles
+// Without JS nothing is wrapped or hidden, so every slide renders as a
+// plain, fully expanded card
 .no-js {
-    #experience-carousel {
+    #experience-carousel,
+    #projects-carousel {
         max-width: 1000px;
         margin: 30px auto 0 auto;
         text-align: left;
@@ -122,7 +125,7 @@ body {
                 margin: 0 0 15px 0;
             }
 
-            p {
+            p, ul {
                 color: $text;
                 font-size: 0.9em;
                 margin: 0;
@@ -130,9 +133,14 @@ body {
         }
     }
 
-    // Without JS there is no frame to scroll inside of
-    .exp-body {
+    // There is no frame to scroll inside of
+    .carousel-body {
         overflow: visible;
+    }
+
+    .project-media img {
+        max-width: 300px;
+        height: auto;
     }
 }
 
@@ -355,7 +363,7 @@ footer {
     height: 100vh;
     min-height: 500px;
     max-height: 1080px;
-    background: url(../images/lead-bg.jpg);
+    background: url(../images/coding-giphy.gif);
     background-size: cover;
     padding: 15px;
     overflow: hidden;
@@ -480,7 +488,25 @@ footer {
     }
 }
 
-.exp-carousel {
+/*
+    Shared carousel component — used by both #experience and #projects.
+    Any [data-carousel] container gets one slide visible at a time, with a
+    fixed-height frame whose .carousel-body scrolls internally.
+*/
+
+// Fade hint that more content sits below the fold of a scroll region
+@mixin scroll-fade {
+    position: absolute;
+    content: '';
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+    pointer-events: none;
+}
+
+.carousel {
     margin: 30px auto 0 auto;
     position: relative;
     max-width: 1000px;
@@ -488,15 +514,15 @@ footer {
     outline: none;
 
     &:focus-visible {
-        .exp-viewport {
+        .carousel-viewport {
             border-color: $base-color;
             box-shadow: 0 0 0 2px rgba($base-color, 0.35);
         }
     }
 }
 
-// Fixed frame holding one role at a time
-.exp-viewport {
+// Fixed frame holding one slide at a time
+.carousel-viewport {
     position: relative;
     height: 420px;
     background: #fff;
@@ -504,20 +530,12 @@ footer {
     border-radius: 3px;
     overflow: hidden;
 
-    // Fade hint that more prose sits below the fold
     &:after {
-        position: absolute;
-        content: '';
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 30px;
-        background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
-        pointer-events: none;
+        @include scroll-fade;
     }
 }
 
-.exp-slide {
+.carousel-slide {
     position: absolute;
     top: 0;
     right: 0;
@@ -536,7 +554,7 @@ footer {
     }
 }
 
-.exp-slide-head {
+.carousel-head {
     flex: 0 0 auto;
     border-bottom: 1px solid $border;
     padding-bottom: 10px;
@@ -556,7 +574,7 @@ footer {
         margin: 0 0 5px 0;
     }
 
-    .exp-date {
+    .carousel-meta {
         display: block;
         font-size: 0.9em;
         font-weight: 300;
@@ -565,7 +583,7 @@ footer {
 }
 
 // The scrollable region
-.exp-body {
+.carousel-body {
     flex: 1 1 auto;
     min-height: 0; // let the flex item shrink so it scrolls instead of overflowing
     overflow-y: auto;
@@ -576,6 +594,21 @@ footer {
         color: $text;
         font-size: 0.9em;
         margin: 0;
+    }
+
+    ul {
+        color: $text;
+        font-size: 0.9em;
+        margin: 0;
+        padding-left: 20px;
+    }
+
+    li {
+        margin-bottom: 10px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
     }
 
     &::-webkit-scrollbar {
@@ -597,14 +630,14 @@ footer {
     }
 }
 
-.exp-controls {
+.carousel-controls {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
 }
 
-.exp-nav {
+.carousel-nav {
     background: none;
     border: none;
     padding: 5px 15px;
@@ -619,12 +652,12 @@ footer {
     }
 }
 
-.exp-dots {
+.carousel-dots {
     display: flex;
     align-items: center;
 }
 
-.exp-dot {
+.carousel-dot {
     width: 10px;
     height: 10px;
     padding: 0;
@@ -651,9 +684,9 @@ footer {
 
 @media (prefers-reduced-motion: reduce) {
 
-    .exp-slide,
-    .exp-dot,
-    .exp-nav {
+    .carousel-slide,
+    .carousel-dot,
+    .carousel-nav {
         transition: none;
     }
 }
@@ -729,51 +762,76 @@ footer {
     }
 }
 
-.project {
-    position: relative;
-    max-width: 900px;
-    margin: 0 auto 30px auto;
+// Projects reuse the shared carousel, laying the image beside the detail column
+#projects-carousel {
+    .carousel-slide {
+        flex-direction: row;
+        padding: 0;
+    }
+
+    // The frame-wide fade would wash out the bottom of the image column, and
+    // the actions bar already marks where the bullets end
+    .carousel-viewport:after {
+        content: none;
+    }
+
+    // No fade to clear, and the actions bar supplies the bottom spacing
+    .carousel-body {
+        padding-bottom: 0;
+    }
+}
+
+// The artwork is landscape (~300x200) and sits in a portrait column, so fit the
+// whole image rather than filling the column and cropping it
+.project-media {
+    flex: 0 0 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
     overflow: hidden;
-    background: #fff;
-    border-radius: 4px;
-}
+    background: $background-alt;
+    border-right: 1px solid #e6e6e6;
 
-.project-image {
-    float: left;
-}
-
-.project-info {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: 300px;
-    padding: 15px;
-
-    h3 {
-        font-size: 1.5em;
-        font-weight: 300;
-        color: $heading;
-        margin: 0 0 15px 0;
+    img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 3px;
     }
+}
 
-    p {
-        color: $text;
-        margin: 0 0 15px 0;
+.project-detail {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 25px;
+}
+
+// Keeps the call to action visible instead of scrolling away with the bullets
+.project-actions {
+    flex: 0 0 auto;
+    padding-top: 15px;
+
+    a {
+        display: inline-block;
+        color: $base-color;
         font-size: 0.9em;
-    }
-}
+        padding: 8px 20px;
+        border: 2px solid $base-color;
+        border-radius: 30px;
+        @include transition();
 
-.no-image {
-    .project-info {
-        position: relative;
-        margin: 0;
-        padding: 30px 15px;
-        transform: none;
+        &:hover {
+            color: #fff;
+            background: $base-color;
+            text-decoration: none;
+        }
     }
-}
-
-#more-projects {
-    display: none;
 }
 
 /*
@@ -929,29 +987,38 @@ footer {
     -----------------------------
 */
 
-// Roomier experience carousel on small screens
+// Roomier carousels on small screens
 @media only screen and (max-width: 750px) {
 
-    .exp-viewport {
+    .carousel-viewport {
         height: 60vh;
         min-height: 320px;
     }
 
-    .exp-slide {
+    .carousel-slide {
         padding: 15px;
     }
 
-    .exp-body {
+    .carousel-body {
         padding-right: 10px;
     }
 
-    .exp-nav {
+    .carousel-nav {
         font-size: 1.75em;
         padding: 10px 20px;
     }
 
-    .exp-dot {
+    .carousel-dot {
         border-width: 8px;
+    }
+
+    // The image column costs more than it gives in a narrow frame
+    .project-media {
+        display: none;
+    }
+
+    .project-detail {
+        padding: 15px;
     }
 
 }
@@ -1042,18 +1109,6 @@ footer {
         h3, span {
             float: none;
         }
-    }
-
-    .project-image {
-        display: none;
-    }
-
-    .project-info {
-        position: relative;
-        margin: 0;
-        padding: 30px 15px;
-        top: auto;
-        transform: none;
     }
 
     footer {

@@ -73,13 +73,16 @@
         </div>
         <div class="col-md-8">
           <p>
-            Hello there! My name is Darryl Green! I am a recent Computer Science graduate from Wayne State Univeristy.
-            I have a strong background in web development and web technologies, particularly in front-end development
-            where a great deal of my passion lies!
-            That passion drives me to find elegant and intuitive solutions for users, and fuels my enthusiasm about the
-            intersection of functionality
-            and design. In my spare time I enjoy video games, hiking, all things Star Wars, and tinkering with my
-            custom-built PC!
+            I'm a full-stack privacy-focused software engineer based in New York, with a career that's taken me from aerospace and
+            automotive
+            engineering into privacy and security compliance work at The Washington Post that I do today. Along the way, I've built
+            everything from
+            reusable UI systems, to data privacy compliance infrastructure, to data pipelines feeding machine learning research. My
+            work
+            has been
+            varied in domain but consistent in what I care about: building things that hold up, scale cleanly, and make
+            the next
+            person's job easier.
           </p>
           <br>
           <p>Let's link up and build something cool together!</p>
@@ -91,11 +94,14 @@
 
   <div id="experience" class="background-alt">
     <h2 class="heading">Experience</h2>
-    <div id="experience-carousel">
-      <div data-date="November 2022 – Current">
-        <h3>The Washington Post</h3>
-        <h4>Software Engineer II</h4>
-        <div class="exp-body">
+    <div id="experience-carousel" data-carousel data-carousel-label="Work experience">
+      <div>
+        <div class="carousel-head">
+          <h3>The Washington Post</h3>
+          <h4>Software Engineer II</h4>
+          <span class="carousel-meta">November 2022 – Current</span>
+        </div>
+        <div class="carousel-body">
           <p>
             Since joining The Washington Post, I've worked at the intersection
             of engineering and data privacy building the infrastructure that
@@ -151,10 +157,13 @@
           </p>
         </div>
       </div>
-      <div data-date="June 2021 – September 2022">
-        <h3>Michigan Aerospace Corporation</h3>
-        <h4>Software Engineer</h4>
-        <div class="exp-body">
+      <div>
+        <div class="carousel-head">
+          <h3>Michigan Aerospace Corporation</h3>
+          <h4>Software Engineer</h4>
+          <span class="carousel-meta">June 2021 – September 2022</span>
+        </div>
+        <div class="carousel-body">
           <p>
             At Michigan Aerospace, I worked across several distinct projects
             rather than a single product line, which gave me early exposure to
@@ -213,10 +222,13 @@
           </p>
         </div>
       </div>
-      <div data-date="February 2021 – May 2021">
-        <h3>Brooksource</h3>
-        <h4>Software Engineer-Contractor at Ford Credit</h4>
-        <div class="exp-body">
+      <div>
+        <div class="carousel-head">
+          <h3>Brooksource</h3>
+          <h4>Software Engineer-Contractor at Ford Credit</h4>
+          <span class="carousel-meta">February 2021 – May 2021</span>
+        </div>
+        <div class="carousel-body">
           <p>
             A short but hands-on contract role at Ford Motor Credit, working
             within an existing Angular front-end codebase. I paired and
@@ -266,134 +278,96 @@
 
   <div id="projects" class="background-alt">
     <h2 class="heading">Projects</h2>
-    <div class="container">
-      <div class="row">
-        <!--Start #projects-->
-        <div class="project shadow-large">
-          <div class="project-image">
-            <img src="images/logo.jpg" />
-          </div>
-          <!-- End .project-image -->
-          <div class="project-info">
+    <div id="projects-carousel" data-carousel data-carousel-label="Projects">
+      <div>
+        <div class="project-media">
+          <img src="images/logo.jpg" alt="Netflix-Clone project screenshot" />
+        </div>
+        <div class="project-detail">
+          <div class="carousel-head">
             <h3>Netflix-Clone</h3>
-            <p>
+            <span class="carousel-meta">React.js &middot; MongoDB &middot; Express.js &middot; Node.js &middot; TMDB API
+              &middot; Firebase</span>
+          </div>
+          <div class="carousel-body">
             <ul>
               <li>Developed a clone of Netflix that largely replicates desktop web experience for end-users.</li>
               <li>Completed project in commonly used MERN stack to gain better understanding and experience using the
-                stack.
-              </li>
+                stack.</li>
               <li>Completed project following tutorial allowing for better understanding of React.js framework.</li>
               <li>Deployed on Netlify and Heroku with database hosted on MongoDB Atlas.</li>
-              <li>Tools: React.js, MongoDB, Express.js, Node.js, TMDB API, VS Code, Firebase Authentication
-              </li>
             </ul>
-            </p>
-            <a href=https://github.com/dgreen19/netflix-clone>View
-              Project</a>
           </div>
-          <!-- End .project-info -->
+          <div class="project-actions">
+            <a href="https://github.com/dgreen19/netflix-clone" target="_blank">View Project</a>
+          </div>
         </div>
-        <!-- End .project -->
+      </div>
+      <!-- End .project -->
 
-        <div class="project shadow-large">
-          <div class="project-image">
-            <img src="images/marketing-budget-calculator.jpg" />
-          </div>
-          <!-- End .project-image -->
-          <div class="project-info">
+      <div>
+        <div class="project-media">
+          <img src="images/marketing-budget-calculator.jpg" alt="Angular Budget Calculator project screenshot" />
+        </div>
+        <div class="project-detail">
+          <div class="carousel-head">
             <h3>Angular Budget Calculator</h3>
-            <p>
+            <span class="carousel-meta">Angular &middot; Netlify</span>
+          </div>
+          <div class="carousel-body">
             <ul>
               <li>Created budget calculator app that calculates a budget for user based on expenses and income.</li>
               <li>Completed budget calculator in Angular framework following tutorial to gain a deeper understanding of
                 the framework's functionalities.</li>
-              <li>Tools: Angular, Visual Studio Code, Netlify</li>
             </ul>
-            </p>
-            <a href="https://angular-budget-calc.netlify.app/">View
-              Project</a>
           </div>
-          <!-- End .project-info -->
+          <div class="project-actions">
+            <a href="https://angular-budget-calc.netlify.app/" target="_blank">View Project</a>
+          </div>
         </div>
-        <!-- End .project -->
-
-        <div class="project shadow-large">
-          <div class="project-image">
-            <img src="images/photo-of-rainbow-colored-painting.jpg" />
-          </div>
-          <!-- End .project-image -->
-          <div class="project-info">
-            <h3 id="shopify-header-info">StickerBlitz-Shopify Senior Capstone Project</h3>
-            <p>
-            <ul>
-              <li>
-                Coordinated with a team of three to integrate an embedded Shopify app into the client's website for
-                users to upload
-                designs from a Shopify storefront to the website.
-              </li>
-              <li>
-                Integrated Shopify API to handle the transfer of information, including order items, shipping address,
-                and reporting
-                usage for payment processing.
-              </li>
-              <li>
-                Developed a single Page embedded Shopify App, and extend the existing front-end framework for new
-                features.
-              </li>
-              <li>Tools: JavaScript/Node.js, Shopify Admin API,
-                Amazon DynamoDB,
-                Stripe API for payment processing.</li>
-            </ul>
-            </p>
-          </div>
-          <!-- End .project-info -->
-        </div>
-        <!-- End .project -->
-
-
       </div>
+      <!-- End .project -->
     </div>
   </div>
   <!-- End #projects -->
 
   <div id="skills">
     <h2 class="heading">Skills</h2>
-    <br>
-    <li>Proficiency:</li>
-    <li>Python</li>
-    <li>JavaScript</li>
-    <li>Vue.js</li>
-    <li>HTML</li>
-    <li>CSS</li>
-    <li>Continuous Development</li>
-    <li>Continuous Integration</li>
-    <li>Bootstrap</li>
-    <br></br>
-    <br>
-    <li>Exposure:</li>
-    <li>Angular</li>
-    <li>React.js</li>
-    <li>PostgresSQL</li>
-    <li>MySQL</li>
-    <li>Node.js</li>
-    <li>Unit Testing</li>
-    <li>TDD</li>
-    <li>SQL</li>
-    </br>
-    <br>
-    <li>Tools:</li>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4 skill">
+          <h3>Languages</h3>
+          <p>
+            JavaScript, TypeScript, Python, SQL, HTML5, CSS, Java
+          </p>
+        </div>
+        <!-- End .skill -->
 
-    <li>Jupyter Notebook</li>
-    <li>Yarn</li>
-    <li>GitHub</li>
-    <li>Netlify</li>
-    <li>Heroku</li>
-    <li>Google Firebase</li>
-    <li>MongoDB Atlas</li>
-    <li>Visual Studio Code</li>
-    <li>Visual Studio</li>
-    </br>
-    </ul>
+        <div class="col-sm-4 skill">
+          <h3>Frameworks</h3>
+          <p>
+            React.js, Next.js, Vue.js, Jest, Playwright
+          </p>
+        </div>
+        <!-- End .skill -->
+
+        <div class="col-sm-4 skill">
+          <h3>Databases</h3>
+          <p>
+            MySQL, PostgreSQL, Amazon DynamoDB
+          </p>
+        </div>
+        <!-- End .skill -->
+
+        <div class="col-sm-4 skill">
+          <h3>Other Tools</h3>
+          <p>
+            Amazon Web Services, Yarn, NPM, Git, GitHub Copilot, Claude Code, Jenkins CI/CD, Postman
+          </p>
+        </div>
+        <!-- End .skill -->
+      </div>
+    </div>
   </div>
   <!-- End #skills -->
 
@@ -417,7 +391,7 @@
       <div class="row">
         <div class="col-sm-5 copyright">
           <p>
-            Copyright &copy; 2020 Darryl Green Jr
+            Copyright &copy; 2026 Darryl Green Jr
           </p>
         </div>
         <div class="col-sm-2 top">
