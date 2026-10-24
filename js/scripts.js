@@ -89,7 +89,7 @@
       $dots.append(
         $('<button type="button" class="carousel-dot"></button>').attr(
           "aria-label",
-          i + 1 + " of " + total + ": " + $.trim($(this).find("h3").text())
+          i + 1 + " of " + total + ": " + $(this).find("h3").text().trim()
         )
       );
     });

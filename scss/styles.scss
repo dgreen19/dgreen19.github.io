@@ -84,6 +84,17 @@ $text: #74808a;
     ----------------------------
 */
 
+// Lato is self-hosted so no visitor request goes to a third-party font CDN
+@each $weight in 300, 400, 700, 900 {
+    @font-face {
+        font-family: 'Lato';
+        font-style: normal;
+        font-weight: $weight;
+        font-display: swap;
+        src: url(../libs/lato/lato-latin-#{$weight}-normal.woff2) format('woff2');
+    }
+}
+
 body {
     font-family: 'Lato', sans-serif;
     font-size: 16px;
@@ -890,13 +901,26 @@ footer {
     max-width: 500px;
     margin: 0 auto;
 
+    // Each field is wrapped in its label, so the text sits above its input
+    label {
+        display: block;
+        margin: 0 0 15px 0;
+        text-align: left;
+        color: lighten($base-color, 35%);
+        font-size: 0.9em;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+    }
+
     input, textarea {
         display: block;
         width: 100%;
         padding: 10px;
         border-radius: 4px;
         border: none;
-        margin-bottom: 10px;
+        margin-top: 5px;
+        font-size: 1.1em; // offsets the smaller label text the field inherits
+        font-weight: 400;
         background: darken($base-color, 15%);
         color: #fff;
         @include transition();
@@ -907,6 +931,7 @@ footer {
         &:focus {
             outline: none;
             background: darken($base-color, 25%);
+            box-shadow: 0 0 0 2px rgba(#fff, 0.35);
         }
     }
 
@@ -920,7 +945,7 @@ footer {
         width: 100%;
         background: #fff;
         border-radius: 4px;
-        padding: 5px 10px;
+        padding: 10px;
         border: none;
         color: $base-color;
         font-weight: 700;

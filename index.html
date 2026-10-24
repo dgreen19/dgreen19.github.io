@@ -3,12 +3,14 @@
 
 <head>
   <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action https://formspree.io">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>My Portfolio</title>
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <link rel="icon" href="favicon.ico" type="image/x-icon">
-  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
   <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/styles.css" rel="stylesheet">
@@ -299,7 +301,7 @@
             </ul>
           </div>
           <div class="project-actions">
-            <a href="https://github.com/dgreen19/netflix-clone" target="_blank">View Project</a>
+            <a href="https://github.com/dgreen19/netflix-clone" target="_blank" rel="noopener noreferrer">View Project</a>
           </div>
         </div>
       </div>
@@ -322,7 +324,7 @@
             </ul>
           </div>
           <div class="project-actions">
-            <a href="https://angular-budget-calc.netlify.app/" target="_blank">View Project</a>
+            <a href="https://angular-budget-calc.netlify.app/" target="_blank" rel="noopener noreferrer">View Project</a>
           </div>
         </div>
       </div>
@@ -374,11 +376,19 @@
   <div id="contact">
     <h2>Get in Touch</h2>
     <div id="contact-form">
-      <form method="POST" action="https://formspree.io/green.jr.darryl@gmail.com">
-        <input type="hidden" name="_subject" value="Contact request from personal website" />
-        <input type="text" name="name" id="full-name" placeholder="Your full name" required="">
-        <input type="email" name="_replyto" placeholder="Your email" required>
-        <textarea name="message" placeholder="Your message" required></textarea>
+      <form action="https://formspree.io/f/mkjjnldn" method="POST">
+        <label>
+          Your name:
+          <input type="text" name="name">
+        </label>
+        <label>
+          Your email:
+          <input type="email" name="email">
+        </label>
+        <label>
+          Your message:
+          <textarea name="message"></textarea>
+        </label>
         <button type="submit">Send</button>
       </form>
     </div>
@@ -402,10 +412,10 @@
         <div class="col-sm-5 social">
           <ul>
             <li>
-              <a href="https://github.com/dgreen19" target="_blank"><i class="fa fa-github" aria-hidden="true"></i></a>
+              <a href="https://github.com/dgreen19" target="_blank" rel="noopener noreferrer"><i class="fa fa-github" aria-hidden="true"></i></a>
             </li>
             <li>
-              <a href="https://linkedin.com/in/darrylgreenjr/" target="_blank"><i class="fa fa-linkedin"
+              <a href="https://linkedin.com/in/darrylgreenjr/" target="_blank" rel="noopener noreferrer"><i class="fa fa-linkedin"
                   aria-hidden="true"></i></a>
             </li>
           </ul>
@@ -415,7 +425,7 @@
   </footer>
   <!-- End footer -->
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="js/jquery-3.7.1.min.js"></script>
   <script src="js/scripts.min.js"></script>
 </body>
 
